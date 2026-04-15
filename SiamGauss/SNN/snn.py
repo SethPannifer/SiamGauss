@@ -54,7 +54,6 @@ class SiameseNetwork_dominance(nn.Module):
 
         # dual model layers
         if convD == -1:
-            # permutation invariant "set convolution"
             in_channels = 1
             out_channels = 8
             self.conv1 = SetConv1D(
@@ -91,23 +90,11 @@ class SiameseNetwork_dominance(nn.Module):
 
         self.featurecompare = DominanceGaussian(self.fc_size)
 
-    #     self.sigmoid = nn.Sigmoid()
-    #     self.featurecompare.apply(self.init_weights)
-        
-        # self.apply(self.init_weights)
-
-    # def init_weights(self, m):
-    #     if isinstance(m, nn.Linear):
-    #         torch.nn.init.xavier_uniform_(m.weight)
-    #         m.bias.data.fill_(0.1)
-
-
     def forward_dual(self, x):
         if len(x.shape) == 2:   # shape (batch_size, seq_len)
             x = x.unsqueeze(1)   # add channel dimension -> (batch_size, 1, seq_len)
         output = x
         output = F.relu(self.conv1(output))
-        # output = F.dropout(output, p=0.3) 
         output = output.view(output.size(0), -1)
         output = F.relu(self.fc1(output))
 

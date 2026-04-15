@@ -29,33 +29,6 @@ class QuadrupletLossbatch(nn.Module):
 
         return loss
 
-        # losses = []
-        # if positive is not None:
-        #     for i in range (0,len(positive)):
-        #         losses.append((positive[i] - 1) ** 2)
-        # if neutral is not None:
-        #     for i in range (0,len(neutral)):
-        #         losses.append((neutral[i]) ** 2)
-        # if negative is not None:
-        #     for i in range (0,len(negative)):
-        #         losses.append((negative[i] + 1) ** 2)
-
-        # loss = torch.mean(torch.cat(losses))
-        # return loss
-
-        # pos_loss = ((positive - 1)**2).sum() if positive is not None else 0
-        # neu_loss = (neutral**2).sum() if neutral is not None else 0
-        # neg_loss = ((negative + 1)**2).sum() if negative is not None else 0
-
-        # PMN_counter = [
-        #     positive.size(0) if positive is not None else 1,
-        #     neutral.size(0) if neutral is not None else 1,
-        #     negative.size(0) if negative is not None else 1
-        # ]
-        # loss = (pos_loss / PMN_counter[0]) + (neu_loss / (PMN_counter[1])) + (neg_loss / PMN_counter[2])
-        # return loss
-
-
 
 class QuadrupletLoss(nn.Module):
     def __init__(self):

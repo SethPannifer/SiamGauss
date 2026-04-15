@@ -189,17 +189,13 @@ if __name__ == '__main__':
             accuracy.append(val_data[key][3])
             f1_score.append(val_data[key][5])
 
-
-        # Plotting all metrics on one figure
         plt.figure(figsize=(10, 6))
 
-        # Plot each metric with a label
         plt.plot(epochs, validation_loss, label="Validation Loss", color='blue', linestyle='--')
         plt.plot(epochs, train_loss, label="Training Loss", color='orange', linestyle='--')
         plt.plot(epochs, accuracy, label="Accuracy", color='green', marker='o')
         plt.plot(epochs, f1_score, label="F1 Score", color='purple', marker='x')
-
-        # Labeling and Title
+        
         plt.xlabel("Epoch")
         plt.ylabel("Metric Value")
         plt.title("Model Performance Metrics Over Epochs")

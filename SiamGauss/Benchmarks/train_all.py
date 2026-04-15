@@ -19,8 +19,6 @@ np.random.seed(1)
 if __name__ == '__main__':
     args = training_args(lr = 0.001)
     args.epochs = 20
-    # intial_dataset_size = 100
-    # args.log_interval = intial_dataset_size
 
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     use_mps = not args.no_mps and torch.backends.mps.is_available()
@@ -41,7 +39,6 @@ if __name__ == '__main__':
 
     for n in input_sizes:
         problems.extend([MPMOP1(n), MPMOP2(n), MPMOP3(n), MPMOP4(n), MPMOP5(n), MPMOP6(n), MPMOP7(n), MPMOP8(n), MPMOP9(n), MPMOP10(n), MPMOP11(n)])
-        # problems = [MPMOP4(n), MPMOP5(n), MPMOP6(n), MPMOP7(n), MPMOP8(n), MPMOP9(n), MPMOP10(n), MPMOP11(n)]
 
 
     for problem in problems:
@@ -60,7 +57,7 @@ if __name__ == '__main__':
             except:
                 # print('model could not be loaded')
                 pass
-        # optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+
         optimizer = torch.optim.AdamW(
             model.parameters(),
             lr=args.lr_start,
@@ -75,7 +72,7 @@ if __name__ == '__main__':
 
     with open("Benchmarks/results.csv", "w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["name", "acc", "f1"])  # header
+        writer.writerow(["name", "acc", "f1"]) 
 
         for name, (acc, f1) in results.items():
             writer.writerow([name, acc, f1])

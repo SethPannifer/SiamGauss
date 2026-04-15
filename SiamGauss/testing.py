@@ -65,15 +65,11 @@ def Run_test(model, dataset_index_offset = 200):
         f1_score.append(2 * ((precision[i]*recall[i]) / (precision[i]+recall[i]+0.000001)))
 
     ave_f1_score = sum(f1_score)/len(f1_score)
-    # print(conf_matrix)
     print('Results:')
     print('loss:',loss_accuracy/num_tests,'acc:',accuracy/num_tests,'f1:',ave_f1_score)
     return ('loss:',loss_accuracy/num_tests,'acc:',accuracy/num_tests,'f1:',ave_f1_score)
 
 if __name__ == '__main__':  
-
-    # model_name = 'basicnn.pt'
-    # model = basicNN()
 
     model_name = 'siamguass_ablation/siamese_network_6.pt'
     model = SiameseNetwork_dominance()
