@@ -6,6 +6,8 @@ import os, copy, random, torch, numpy as np
 from typing import List, Text, Union, Dict, Optional
 import torch.nn.functional as F
 
+from SiamGauss.paths import model_name, api, dataset
+
 #the str2matrix function is taken from https://github.com/D-X-Y/NAS-Bench-201/blob/master/nas_201_api/api_201.py
 def str2matrix(arch_str: Text,
                  search_space: List[Text] = ['none', 'skip_connect', 'nor_conv_1x1', 'nor_conv_3x3', 'avg_pool_3x3']) -> np.ndarray:
@@ -106,7 +108,7 @@ def matrix2str(arch_matrix: List,
 # ImageNet16-120
 
 class NATS_neuralNetwork():
-    def __init__(self,matrix, dataset = 'cifar100', api =create(path_dir +'/SNN/Resources/NATS_DATASETS/NATS-tss-v1_0-3ffb9-simple', 'tss', fast_mode=True, verbose=False)):
+    def __init__(self,matrix, dataset = 'cifar100', api = api):
         self.dataset = dataset
         self.matrix = matrix
         self.encoded_matrix = F.one_hot(torch.tensor(self.matrix, dtype=torch.int64), num_classes=5).float()  # Shape: (4, 4, 5)

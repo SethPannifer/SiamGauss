@@ -1,10 +1,13 @@
 from nats_bench import create
 import torch
 import random
-from SNN.Resources.NATS_prep import NATS_neuralNetwork, str2matrix, matrix2str
-from SNN.snn import SiameseNetwork_dominance
-from SNN.Resources.MOO_functions import mooDataset
-from train import train
+from SiamGauss.SNN.Resources.NATS_prep import NATS_neuralNetwork, str2matrix, matrix2str
+from SiamGauss.SNN.snn import SiameseNetwork_dominance
+from SiamGauss.SNN.Resources.MOO_functions import mooDataset
+from SiamGauss.paths import model_name, api, dataset
+from SiamGauss.train import train
+from SiamGauss.paths import model_name, api, dataset
+
 import pathlib
 path_dir = str(pathlib.Path().resolve())
 
@@ -27,7 +30,7 @@ class training_args():
 args = training_args()
 
 
-def fine_tune(data_points_idx,model_name):
+def fine_tune(data_points_idx,model_name, api = api):
     args = training_args()
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     use_mps = not args.no_mps and torch.backends.mps.is_available()
@@ -49,7 +52,6 @@ def fine_tune(data_points_idx,model_name):
         train_kwargs.update(cuda_kwargs)
         test_kwargs.update(cuda_kwargs)
 
-    api = create(path_dir +'/SNN/Resources/NATS_DATASETS/NATS-tss-v1_0-3ffb9-simple', 'tss', fast_mode=True, verbose=False)
     intial_dataset_size = 10
     dataset_matrix = [[],[]]
     for i in (data_points_idx):
@@ -65,8 +67,6 @@ def fine_tune(data_points_idx,model_name):
 
         
     mooDataset_train = mooDataset(dataset_matrix[0], dataset_matrix[1])
-    # mooDataset_test = mooDataset()
-
 
     model = SiameseNetwork_dominance()
     # args.load_model = False
@@ -88,6 +88,5 @@ def fine_tune(data_points_idx,model_name):
 
 if __name__ == '__main__':   
     data_points_idx = [i for i in range(0,10)]
-    model_name = 'siamese_network_401.pt'
     fine_tune(data_points_idx, model_name)
 

@@ -4,12 +4,13 @@ import torch.nn as nn
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
 from nats_bench import create
-from SNN.snn import SiameseNetwork_dominance
-from SNN.basic_NN import basicNN
-from SNN.SNN_tools.loss_functions import QuadrupletLossbatch, QuadrupletLoss
-from SNN.Resources.NATS_prep import NATS_neuralNetwork, str2matrix
-from SNN.Resources.MOO_functions import domination_check, mooDataset
-from testing import Run_test
+from SiamGauss.SNN.snn import SiameseNetwork_dominance
+from SiamGauss.SNN.SNN_tools.loss_functions import QuadrupletLossbatch, QuadrupletLoss
+from SiamGauss.SNN.Resources.NATS_prep import NATS_neuralNetwork, str2matrix
+from SiamGauss.SNN.Resources.MOO_functions import domination_check, mooDataset
+from SiamGauss.paths import model_name, api, dataset
+from SiamGauss.testing import Run_test
+
 import csv
 from itertools import product
 
@@ -109,8 +110,7 @@ class training_args():
             self.plot = plot
 
 
-def make_dataset(intial_dataset_size):
-    api = create(path_dir +'/SNN/Resources/NATS_DATASETS/NATS-tss-v1_0-3ffb9-simple', 'tss', fast_mode=True, verbose=False)
+def make_dataset(intial_dataset_size, api = api):
     dataset_matrix = [[],[]]
     for i in range (0,intial_dataset_size):
         str_arch = api.arch(i)
@@ -142,7 +142,6 @@ if __name__ == '__main__':
         
         mooDataset_train = make_dataset(intial_dataset_size)
 
-        # model = basicNN().to(device)
         if hidden_size_1 != None:
             model = SiameseNetwork_dominance(
                 input_size=input_size,

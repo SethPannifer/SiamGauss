@@ -1,10 +1,10 @@
 from nats_bench import create
 import torch
 import random
-from SNN.Resources.NATS_prep import NATS_neuralNetwork, str2matrix, matrix2str
-from SNN.SNN_tools.loss_functions import QuadrupletLossbatch, QuadrupletLoss
-from SNN.snn import SiameseNetwork_dominance
-from SNN.Resources.MOO_functions import mooDataset
+from SiamGauss.SNN.Resources.NATS_prep import NATS_neuralNetwork, str2matrix, matrix2str
+from SiamGauss.SNN.SNN_tools.loss_functions import QuadrupletLossbatch, QuadrupletLoss
+from SiamGauss.SNN.snn import SiameseNetwork_dominance
+from SiamGauss.SNN.Resources.MOO_functions import mooDataset
 
 import pathlib
 from Benchmarks.mpbench.problems.mpmop1 import MPMOP1

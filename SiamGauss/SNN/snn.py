@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from SNN.SNN_tools.comparison_functions import DominanceNN, DominancePlane, DominanceGaussian
+from SiamGauss.SNN.SNN_tools.comparison_functions import DominanceNN, DominancePlane, DominanceGaussian
 
 class SetConv1D(nn.Module):
     def __init__(self, in_channels, out_channels, hidden_dim=16, pool="sum"):

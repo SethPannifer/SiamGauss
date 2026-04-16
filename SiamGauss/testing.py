@@ -1,15 +1,13 @@
 import random
 import torch
 from nats_bench import create
-from SNN.Resources.NATS_prep import NATS_neuralNetwork, str2matrix
-from SNN.snn import SiameseNetwork_dominance
-from SNN.basic_NN import basicNN
-from SNN.Resources.MOO_functions import domination_check
+from SiamGauss.SNN.Resources.NATS_prep import NATS_neuralNetwork, str2matrix
+from SiamGauss.SNN.snn import SiameseNetwork_dominance
+from SiamGauss.SNN.Resources.MOO_functions import domination_check
+from SiamGauss.paths import model_name, api, dataset
 import pathlib
 
 path_dir = str(pathlib.Path().resolve()) 
-api = create(path_dir +'/SNN/Resources/NATS_DATASETS/NATS-tss-v1_0-3ffb9-simple', 'tss', fast_mode=True, verbose=False)
-
 
 def Run_test(model, dataset_index_offset = 200):
 
@@ -71,11 +69,8 @@ def Run_test(model, dataset_index_offset = 200):
 
 if __name__ == '__main__':  
 
-    model_name = 'siamguass_ablation/siamese_network_6.pt'
     model = SiameseNetwork_dominance()
-
     model.load_state_dict(torch.load(model_name))
-
     Run_test(model)
 
 
