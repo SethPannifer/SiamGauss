@@ -47,5 +47,3 @@ Thumbs.db
 *.pt
 *.csv
 
-# NAS data
-SiamGauss/SNN/Resources/NATS_DATASETS/
