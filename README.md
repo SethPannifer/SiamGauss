@@ -11,7 +11,7 @@ This code base provides the tools to create, test, and use SiamGauss discussed i
 
 ## Prerequisites
 
-Before beginning, please ensure you download the appropriate datasets from [AutoDL-Projects](https://github.com/D-X-Y/AutoDL-Projects) (For NATS use). Documentation is contained there. These datasets must be extracted and the file location updated in paths.py
+(For NATS use): Before beginning, please ensure you download the appropriate datasets from [AutoDL-Projects](https://github.com/D-X-Y/AutoDL-Projects) . Documentation is contained there. These datasets must be extracted and the file location updated in paths.py
 
 ### Requirements
 
@@ -47,7 +47,7 @@ model_name = 'siamese_network.pt'
 
 Then to run the code simply use the command, ensure you are in the root directory and then:
 ```bash
-python -m SiamGauss.train
+python -m SiamGauss.NATS.train
 ```
 in  the terminal.
 
@@ -60,7 +60,7 @@ data_points_idx = [i for i in range(0,10)]
 ```
 to contain the list of desired NATS architeture IDs, and run with (ensure you are in the root directory):
 ```bash
-python -m SiamGauss.fine_tuning.py
+python -m SiamGauss.NATS.fine_tuning.py
 ```
 
 ## Testing of SNN performance (Testing.py)
