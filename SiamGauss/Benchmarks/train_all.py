@@ -6,12 +6,12 @@ import pathlib
 import csv
 
 from nats_bench import create
-from SiamGauss.SNN.Resources.NATS_prep import NATS_neuralNetwork, str2matrix, matrix2str
+
 from SiamGauss.SNN.SNN_tools.loss_functions import QuadrupletLossbatch, QuadrupletLoss
 from SiamGauss.SNN.snn import SiameseNetwork_dominance
 from SiamGauss.SNN.Resources.MOO_functions import mooDataset
-from Benchmarks.mpbench.problems import *
-from Benchmarks.train_bench import *
+from SiamGauss.Benchmarks.mpbench.problems import *
+from SiamGauss.Benchmarks.train import *
 
 np.random.seed(1)
 
