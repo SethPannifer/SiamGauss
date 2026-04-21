@@ -1,10 +1,12 @@
 import random
 import torch
 from nats_bench import create
-from SiamGauss.SNN.Resources.NATS_prep import NATS_neuralNetwork, str2matrix
+
 from SiamGauss.SNN.snn import SiameseNetwork_dominance
 from SiamGauss.SNN.Resources.MOO_functions import domination_check
-from SiamGauss.paths import model_name, api, dataset
+
+from SiamGauss.NATS.NATS_prep import NATS_neuralNetwork, str2matrix
+from SiamGauss.NATS.paths import model_name, api, dataset
 import pathlib
 
 path_dir = str(pathlib.Path().resolve()) 

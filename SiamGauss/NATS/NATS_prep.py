@@ -6,7 +6,7 @@ import os, copy, random, torch, numpy as np
 from typing import List, Text, Union, Dict, Optional
 import torch.nn.functional as F
 
-from SiamGauss.paths import model_name, api, dataset
+from SiamGauss.NATS.paths import model_name, api, dataset
 
 #the str2matrix function is taken from https://github.com/D-X-Y/NAS-Bench-201/blob/master/nas_201_api/api_201.py
 def str2matrix(arch_str: Text,

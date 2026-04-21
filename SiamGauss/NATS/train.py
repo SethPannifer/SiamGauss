@@ -7,10 +7,11 @@ from nats_bench import create
 
 from SiamGauss.SNN.snn import SiameseNetwork_dominance
 from SiamGauss.SNN.SNN_tools.loss_functions import QuadrupletLossbatch, QuadrupletLoss
-from SiamGauss.SNN.Resources.NATS_prep import NATS_neuralNetwork, str2matrix
 from SiamGauss.SNN.Resources.MOO_functions import domination_check, mooDataset
-from SiamGauss.paths import model_name, api, dataset
-from SiamGauss.testing import Run_test
+
+from SiamGauss.NATS.NATS_prep import NATS_neuralNetwork, str2matrix
+from SiamGauss.NATS.paths import model_name, api, dataset
+from SiamGauss.NATS.testing import Run_test
 
 
 import pathlib
@@ -125,10 +126,10 @@ def make_dataset(intial_dataset_size):
     return mooDataset(dataset_matrix[0], dataset_matrix[1])
 
 if __name__ == '__main__':                
-    args = training_args(lr = 0.0005)
-    args.epochs = 20
-    intial_dataset_size = 200
-    args.log_interval = intial_dataset_size
+    # args = training_args(lr = 0.0005)
+    # args.epochs = 20
+    # intial_dataset_size = 200
+    # args.log_interval = intial_dataset_size
 
     def lr_scheduler(lr, epoch):
         return max(lr * (1 - ((0.1*epoch)**2)), 0.00005)
