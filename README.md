@@ -40,7 +40,7 @@ Set-up:
     args.epochs = 10
     intial_dataset_size = 10
 ```
-**These settings are low weight to reduce risk of failure if run with without modification, in practice larger datasets will result in better results if compuational power is available**
+These settings are low weight to reduce risk of failure if run with without modification, in practice larger datasets will result in better results if compuational power is available
 3. Update
 ```python 
 model_name = 'siamese_network.pt' 
