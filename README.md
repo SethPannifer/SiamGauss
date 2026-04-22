@@ -26,28 +26,28 @@ This code base provides the tools to create, test, and use SiamGauss discussed i
 (For NATS use): Before beginning, please ensure you download the appropriate datasets from [AutoDL-Projects](https://github.com/D-X-Y/AutoDL-Projects) . Documentation is contained there. These datasets must be extracted and the file location updated in paths.py
 
 
-1. **update NATS dataset files paths in paths **
-2. **Note which .pt SNN archititure you plan on using, this must be updated in the 'main' function of your chosen action**
+1. update NATS dataset files paths in paths 
+2. Note which .pt SNN archititure you plan on using, this must be updated in the 'main' function of your chosen action
 
-## SNN creation and full training on NATS dataset(Siamese_for_dominance_check.py):
+## SNN creation and full training on NATS dataset:
 The following steps will guide you to make your own SNN from scratch and train it. NOTE: THIS IS RESOURCE INTENSIVE, AND CARE IS RECOMMEND RUNNING THIS SCRIPT OUTSIDE OF A CLUSTER
 
 Set-up:
-1. **ensure correct database is attached, if you have renamed the dataset, modify paths.py appropriatley.**
-2. **setting up hyper parameters, all parameters can be found in the argument parser, the 3 most with the largest impact however are:**
+1. ensure correct database is attached, if you have renamed the dataset, modify paths.py appropriatley.
+2. setting up hyper parameters, all parameters can be found in the argument parser, the 3 most with the largest impact however are:
 ```python
     args.lr = 0.0001
     args.epochs = 10
     intial_dataset_size = 10
 ```
 **These settings are low weight to reduce risk of failure if run with without modification, in practice larger datasets will result in better results if compuational power is available**
-3. **Update**
+3. Update
 ```python 
 model_name = 'siamese_network.pt' 
 ``` 
-**in paths.py function as required**
+in paths.py function as required
 
-4. **loading and saving the model, in train.py the arg paser load_model = True, save_model=True must be modified as required. If both are true the model will be over written, so ensure models are copied if this is not desired.**
+4. loading and saving the model, in train.py the arg paser load_model = True, save_model=True must be modified as required. If both are true the model will be over written, so ensure models are copied if this is not desired.
 
 Then to run the code simply use the command, ensure you are in the root directory and then:
 ```bash
