@@ -1,5 +1,15 @@
 
 # SiamGauss
+
+Multi-objectiveoptimisationreliesonrepeatedpairwisecom- parisons to determine dominance relations among candidate solutions. In many real-world settings, such as neural architecture search (NAS), these comparisons are computationally expensive because at least one objective requires costly evaluation. This motivates surrogate models that estimate dominance directly, without approximating objective val- ues. This paper introduces SiamGauss, a Siamese surrogate model for pairwise dominance prediction. The model learns a latent representation of candidate solutions through shared feature extractors, while a Gaus- sian comparison layer estimates the probability of dominance or mutual non-dominance. To support this ternary prediction task, a quadruplet loss with batch-based training is proposed. SiamGauss is evaluated in a two-stage protocol. First, synthetic multi-objective benchmarks demon- strate its ability to learn dominance relations under controlled condi- tions. Second, the model is applied to NAS using NATS-Bench, where architectures are compared in terms of accuracy and computational cost. Across multiple datasets and scenarios, SiamGauss achieves strong per- formance, with accuracy up to 0.944 and F1 scores up to 0.927. Ablation studies confirm the importance of the Gaussian comparison layer and the Siamese design. These results indicate that SiamGauss is an effective and general-purpose surrogate for dominance prediction in computationally expensive multi-objective optimisation problems.
+
+An overview of the proposed SiamGauss surrogate model with NAS encoder as an illustrative example:
+
+<img width="724" height="410" alt="Screenshot 2026-04-23 at 14 03 00" src="https://github.com/user-attachments/assets/de2ed469-f267-4e58-a0f7-06ad7376f3e5" />
+
+Middle: general SiamGauss pipeline, in which two encoded can- didate solutions, X1 and X2, are processed by parallel Siamese branches with shared weights and then compared through the Gaussian comparison layer. Top-left: exam- ple of an encoding stage for the neural architecture search (NAS) setting, where a candidate architecture is transformed into a tensor representation. In general multi- objective optimisation problems, this step is replaced by any problem-specific encoding that maps candidate solutions into suitable input representations. Top-right: Siamese feature extraction network. Bottom: Gaussian comparison layer, which computes the likelihood of both dominance cases and produces an output τ ∈ [−1, 1].
+
+# Code
 This code base provides the tools to create, test, and use SiamGauss discussed in SiamGauss: A Siamese Surrogate Model for Predicting Dominance in Multi-Objective Optimisation. The test cases include multi-objective benchamark problems from and https://arxiv.org/abs/2402.02033 and NATS bench Neural Network architecture search. Test cases include:
 
 **NATS**
