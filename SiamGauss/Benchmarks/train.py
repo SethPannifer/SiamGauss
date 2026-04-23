@@ -1,4 +1,3 @@
-from nats_bench import create
 import torch
 import random
 
