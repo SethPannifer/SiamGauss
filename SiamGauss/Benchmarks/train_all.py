@@ -11,10 +11,12 @@ from SiamGauss.SNN.Resources.MOO_functions import mooDataset
 from SiamGauss.Benchmarks.mpbench.problems import *
 from SiamGauss.Benchmarks.train import *
 
-np.random.seed(1)
+
 
 
 if __name__ == '__main__':
+    
+
     args = training_args(lr = 0.001)
     args.epochs = 20
 
@@ -38,37 +40,38 @@ if __name__ == '__main__':
     for n in input_sizes:
         problems.extend([MPMOP1(n), MPMOP2(n), MPMOP3(n), MPMOP4(n), MPMOP5(n), MPMOP6(n), MPMOP7(n), MPMOP8(n), MPMOP9(n), MPMOP10(n), MPMOP11(n)])
 
+    for seed in range(0,10):
+        np.random.seed(seed)
+        for problem in problems:
+            popsize = 100
+            args.log_interval = popsize
+            val_popsize = 100
+            mooDataset_train = make_data(problem, popsize = popsize)
+            mooDataset_val = make_data(problem, popsize = popsize)
 
-    for problem in problems:
-        popsize = 100
-        args.log_interval = popsize
-        val_popsize = 100
-        mooDataset_train = make_data(problem, popsize = popsize)
-        mooDataset_val = make_data(problem, popsize = popsize)
+            model = SiameseNetwork_dominance(input_size = problem.D,num_repeated_hidden = 1, hidden_size_1 = problem.D*8*8, hidden_size_2 =  problem.D, fc_size =  4, convD = 0).to(device)
+            model_name = 'Benchmarks/Models/siamese_network_benchmark.pt'
+            if args.load_model:
+                try:
+                    model.load_state_dict(torch.load(model_name))
+                    print('model loaded')
+                except:
+                    # print('model could not be loaded')
+                    pass
 
-        model = SiameseNetwork_dominance(input_size = problem.D,num_repeated_hidden = 1, hidden_size_1 = problem.D*8*8, hidden_size_2 =  problem.D, fc_size =  4, convD = 0).to(device)
-        model_name = 'Benchmarks/Models/siamese_network_benchmark.pt'
-        if args.load_model:
-            try:
-                model.load_state_dict(torch.load(model_name))
-                print('model loaded')
-            except:
-                # print('model could not be loaded')
-                pass
+            optimizer = torch.optim.AdamW(
+                model.parameters(),
+                lr=args.lr_start,
+                weight_decay=1e-4
+                )
 
-        optimizer = torch.optim.AdamW(
-            model.parameters(),
-            lr=args.lr_start,
-            weight_decay=1e-4
-)
+            _ = train(args, model, device, mooDataset_train, mooDataset_val, optimizer, fast_run = True)
 
-        _ = train(args, model, device, mooDataset_train, mooDataset_val, optimizer, fast_run = True)
+            mooDataset_val = make_data(problem, popsize = val_popsize)
+            testing(model, device, mooDataset_train, Threshold = 0.5)
+            results[str(seed) + problem.__class__.__name__ + "_" + str(problem.D)] = testing(model, device, mooDataset_val, Threshold = 0.5)
 
-        mooDataset_val = make_data(problem, popsize = val_popsize)
-        testing(model, device, mooDataset_train, Threshold = 0.5)
-        results[problem.__class__.__name__ + "_" + str(problem.D)] = testing(model, device, mooDataset_val, Threshold = 0.5)
-
-    with open("Benchmarks/results.csv", "w", newline="") as f:
+    with open("SiamGauss/Benchmarks/results.csv", "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(["name", "acc", "f1"]) 
 
@@ -76,4 +79,3 @@ if __name__ == '__main__':
             writer.writerow([name, acc, f1])
 
     print(results)
-    
