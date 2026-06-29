@@ -66,11 +66,112 @@ def train_step(args, model, device, dataset, optimizer, epoch, lossfunc = 'quadl
             running_loss += loss.item()
         print('Train Epoch: {} \tLoss: {:.6f}'.format(epoch,  running_loss))
 
+def train_step_vector(args, model, device, dataset, optimizer, epoch, lossfunc='quadlossbatch', fast_run=False):
+
+    model.train()
+
+    if lossfunc == 'quadlossbatch':
+        criterion = QuadrupletLossbatch().to(device)
+        dataset_length = len(dataset)
+
+        if fast_run:
+        dataset_length -= 1
+
+        loss = 0
+
+        Threshold = 0.5
+        conf_matrix = [[0,0,0],[0,0,0],[0,0,0]]
+
+        # --- helper functions defined once ---
+        def ensure_batch(x):
+            if isinstance(x, list):
+                return torch.stack(x).to(device)
+            elif isinstance(x, torch.Tensor):
+                return x.to(device)
+            else:
+                raise TypeError(f'Unexpected type {type(x)}')
+
+        def safe_forward(anchor, examples):
+            if examples is None or examples.size(0) == 0:
+                return None
+            batch_anchor = anchor.expand(examples.size(0), -1, -1) # faster than repeat
+            return model(batch_anchor, examples)
+
+        def classify(x):
+            if x >= Threshold:
+                return 2
+            elif x <= -Threshold:
+                return 0
+            else:
+                return 1
+
+        for i in range(dataset_length):
+
+            if fast_run:
+                anchor, positive, neutral, negative = dataset.__getitem_vectorised__(i)
+            else:
+                anchor, positive, neutral, negative = dataset.__getitem__(i)
+
+            anchor = anchor.to(device).unsqueeze(0).unsqueeze(1)
+
+            positive = ensure_batch(positive).unsqueeze(1)
+            neutral = ensure_batch(neutral).unsqueeze(1)
+            negative = ensure_batch(negative).unsqueeze(1)
+
+            output_positive = safe_forward(anchor, positive)
+            output_neutral = safe_forward(anchor, neutral)
+            output_negative = safe_forward(anchor, negative)
+
+            loss += criterion(output_positive, output_neutral, output_negative)
+
+            # --- metrics ---
+            if output_positive is not None:
+                for x in output_positive.detach():
+                    conf_matrix[classify(float(x))][2] += 1
+
+            if output_neutral is not None:
+                for x in output_neutral.detach():
+                    conf_matrix[classify(float(x))][1] += 1
+
+            if output_negative is not None:
+                for x in output_negative.detach():
+                    conf_matrix[classify(float(x))][0] += 1
+
+        loss = loss / dataset_length
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        # --- compute metrics ---
+        precision = []
+        recall = []
+        f1_score = []
+
+        for i in range(3):
+            tp = conf_matrix[i][i]
+            precision_i = tp / (sum(conf_matrix[i]) + 1e-6)
+            recall_i = tp / (conf_matrix[0][i] + conf_matrix[1][i] + conf_matrix[2][i] + 1e-6)
+            f1_i = 2 * precision_i * recall_i / (precision_i + recall_i + 1e-6)
+
+            precision.append(precision_i)
+            recall.append(recall_i)
+            f1_score.append(f1_i)
+
+        ave_f1_score = sum(f1_score) / 3
+
+        print(f'Train Epoch: {epoch} \tLoss: {loss.item():.6f} \tF1: {ave_f1_score:.6f}')
+
+        return loss.item(), ave_f1_score
+
 def train(args, model, device, mooDataset_train, mooDataset_val,  optimizer, fast_run = False):
     train_loss = {}
     val_data = {}
     for epoch in range(1, args.epochs + 1):
-        train_loss[epoch] = train_step(args, model, device, mooDataset_train, optimizer, epoch, fast_run = fast_run)
+        if fast_run:
+            train_loss[epoch] = train_step_vector(args, model, device, mooDataset_train, optimizer, epoch, fast_run = fast_run)
+        else:
+            train_loss[epoch] = train_step(args, model, device, mooDataset_train, optimizer, epoch, fast_run = fast_run)
         # val_data[epoch] = testing(model, device, mooDataset_val, print_vals = False)
         # args.lr = lr_scheduler(args.lr_start, epoch)
     
